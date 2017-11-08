@@ -1,0 +1,12 @@
+{{ ansible_managed }}
+AZKABAN_DIR={{ azkaban_web_server_install_dir }}
+
+AZKABAN_OPTS=-Xmx{{ azkaban_web_server_xmx }} \
+-Dlog4j.configuration=file:{{ azkaban_web_server_conf_dir }}/log4j.properties \
+-Dlog4j.log.dir={{ azkaban_web_server_log_dir }} \
+-server -Dcom.sun.management.jmxremote \
+-Djava.io.tmpdir=/tmp \
+-Dexecutorport={{ azkaban_exec_server_port }} \
+-Dserverpath={{ azkaban_web_server_install_dir }}
+
+AZKABAN_CONF=-conf {{ azkaban_web_server_conf_dir }}

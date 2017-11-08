@@ -1,0 +1,24 @@
+---
+
+- hosts: mysql
+  roles:
+    - mysql
+
+- hosts: azkaban
+  roles:
+    - java
+
+- hosts: websolo
+  roles:
+    - role: azkaban-role
+      azkaban_server_role: all
+
+- hosts: executor
+  roles:
+    - role: azkaban-role
+      azkaban_server_role: executor
+
+- hosts: webmultiple
+  roles:
+    - role: azkaban-role
+      azkaban_server_role: web

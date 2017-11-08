@@ -1,0 +1,22 @@
+
+---
+
+- name: Azkaban | Configuring webserver
+  systemd:
+    name: azkaban-{{ item }}
+    state: "{{ azkaban_service_state }}"
+    enabled: "{{ azkaban_service_enabled }}"
+    daemon_reload: yes
+  with_items:
+    - "webserver"
+  when: azkaban_server_role in ["web", "all"]
+
+- name: Azkaban | Configuring executorserver
+  systemd:
+    name: azkaban-{{ item }}
+    state: "{{ azkaban_service_state }}"
+    enabled: "{{ azkaban_service_enabled }}"
+    daemon_reload: yes
+  with_items:
+    - "executorserver"
+  when: azkaban_server_role in ["executor", "all"]

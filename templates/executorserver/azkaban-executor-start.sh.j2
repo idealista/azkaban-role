@@ -1,0 +1,34 @@
+#!/bin/bash
+
+for file in $AZKABAN_DIR/lib/*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $AZKABAN_DIR/extlib/*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $AZKABAN_DIR/plugins/*/*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+if [ "$HADOOP_HOME" != "" ]; then
+        echo "Using Hadoop from $HADOOP_HOME"
+        CLASSPATH=$CLASSPATH:$HADOOP_HOME/conf:$HADOOP_HOME/*
+        JAVA_LIB_PATH="-Djava.library.path=$HADOOP_HOME/lib/native/Linux-amd64-64"
+else
+        echo "Error: HADOOP_HOME is not set. Hadoop job types will not run properly."
+fi
+
+if [ "$HIVE_HOME" != "" ]; then
+        echo "Using Hive from $HIVE_HOME"
+        CLASSPATH=$CLASSPATH:$HIVE_HOME/conf:$HIVE_HOME/lib/*
+fi
+
+
+java $AZKABAN_OPTS $JAVA_LIB_PATH -cp $CLASSPATH azkaban.execapp.AzkabanExecutorServer $AZKABAN_CONF $@ &
+
+echo $! > /run/azkaban/executor.pid

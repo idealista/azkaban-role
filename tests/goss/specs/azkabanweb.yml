@@ -1,0 +1,59 @@
+file:
+  /etc/default/azkaban-web-start.sh:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/default/azkaban-web-stop.sh:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/default/azkaban-web:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/azkaban-web-server:
+    owner: azkaban
+    group: azkaban
+    filetype: directory
+    exists: true
+  /etc/azkaban-web-server/azkaban-users.xml:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0640"
+  /etc/azkaban-web-server/azkaban.properties:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0640"
+  /etc/azkaban-web-server/log4j.properties:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0640"
+  /lib/systemd/system/azkaban-webserver.service:
+    exists: true
+  /var/log/azkaban-web-server/web.log:
+    owner: azkaban
+    group: azkaban
+    exists: true
+
+port:
+  tcp6:8080:
+    listening: true
+    ip:
+    - '::'
+
+service:
+  azkaban-webserver:
+    enabled: true
+    running: true
+
+command:
+  cat /etc/azkaban-web-server/azkaban.properties |  grep azkaban.version |  cut -d = -f 2:
+    exit-status: 0
+    stdout:
+    - 3.37.0

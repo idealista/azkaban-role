@@ -1,0 +1,63 @@
+{{ ansible_managed }}
+azkaban.version={{ azkaban_version }}
+azkaban.name={{ azkaban_web_server_name }}
+azkaban.label={{ azkaban_web_server_label }}
+azkaban.color={{ azkaban_web_server_color }}
+
+database.type=mysql
+mysql.port= {{ azkaban_db_port }}
+mysql.host={{ azkaban_db_hostname }}
+mysql.database={{ azkaban_db_name }}
+mysql.user={{ azkaban_db_user }}
+mysql.password= {{ azkaban_db_pwd }}
+mysql.numconnections={{ azkaban_db_num_connections }}
+
+jetty.maxThreads={{ azkaban_web_server_jetty_max_threads }}
+jetty.port={{ azkaban_web_server_jetty_port }}
+jetty.use.ssl={{ azkaban_web_server_jetty_use_ssl }}
+jetty.connector.stats={{ azkaban_web_server_jetty_connector_stats }}
+{% if azkaban_web_server_jetty_use_ssl %}
+jetty.ssl.port={{ azkaban_web_server_jetty_ssl_port }}
+{% endif %}
+
+user.manager.class={{ azkaban_web_server_user_manager_class }}
+user.manager.xml.file={{ azkaban_web_server_conf_dir }}/azkaban-users.xml
+session.time.to.live={{ azkaban_web_server_session_time_to_live }}
+max.num.sessions={{ azkaban_web_server_max_num_sessions }}
+
+{% if azkaban_use_multiple_executors %}
+azkaban.use.multiple.executors=true
+azkaban.executorselector.filters={{ azkaban_executorselector_filters }}
+azkaban.executorselector.comparator.NumberOfAssignedFlowComparator={{ azkaban_executorselector_comparator_NumberOfAssignedFlowComparator }}
+azkaban.executorselector.comparator.Memory={{ azkaban_executorselector_comparator_Memory }}
+azkaban.executorselector.comparator.LastDispatched={{ azkaban_executorselector_comparator_LastDispatched }}
+azkaban.executorselector.comparator.CpuUsage={{azkaban_executorselector_comparator_CpuUsage  }}
+azkaban.queueprocessing.enabled={{ azkaban_queueprocessing_enabled }}
+azkaban.webserver.queue.size={{ azkaban_webserver_queue_size }}
+azkaban.activeexecutor.refresh.milisecinterval={{ azkaban_activeexecutor_refresh_milisecinterval }}
+azkaban.activeexecutor.refresh.flowinterval={{ azkaban_activeexecutor_refresh_flowinterval }}
+azkaban.executorinfo.refresh.maxThreads={{ azkaban_executorinfo_refresh_maxThreads }}
+{% else %}
+executor.port={{ azkaban_exec_server_port }}
+{% endif %}
+
+web.resource.dir=web
+
+{% if azkaban_web_server_user_manager_class == 'net.researchgate.azkaban.LdapUserManager' %}
+user.manager.ldap.host={{ azkaban_ldap_usermanager_host }}
+user.manager.ldap.port={{ azkaban_ldap_usermanager_port }}
+user.manager.ldap.useSsl={{ azkaban_ldap_usermanager_use_ssl }}
+user.manager.ldap.userBase={{ azkaban_ldap_usermanager_user_base }}
+user.manager.ldap.userIdProperty={{ azkaban_ldap_usermanager_user_id_property }}
+user.manager.ldap.emailProperty={{ azkaban_ldap_usermanager_email_property }}
+user.manager.ldap.bindAccount={{ azkaban_ldap_usermanager_bind_account }}
+user.manager.ldap.bindPassword={{ azkaban_ldap_usermanager_bind_password }}
+user.manager.ldap.allowedGroups={{ azkaban_ldap_usermanager_allowed_groups }}
+user.manager.ldap.groupSearchBase={{ azkaban_ldap_usermanager_group_search_base }}
+user.manager.ldap.embeddedGroups={{ azkaban_ldap_usermanager_embedded_groups }}
+{% endif %}
+
+mail.sender={{ azkaban_web_server_mail_sender }}
+mail.host={{ azkaban_web_server_mail_host }}
+mail.user={{ azkaban_web_server_mail_user }}
+mail.password={{ azkaban_web_server_mail_password }}

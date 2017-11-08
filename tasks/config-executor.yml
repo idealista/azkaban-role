@@ -1,0 +1,93 @@
+---
+
+- name: Azkaban | Check executor
+  command: >
+    mysql
+    -h {{ azkaban_db_hostname }}
+    -P {{ azkaban_db_port }}
+    -u {{ azkaban_db_user }}
+    -p{{ azkaban_db_pwd }}
+    {{ azkaban_db_name }}
+    -se "{{ azkaban_check_executor_exists_query }}"
+  register: azkaban_executor_check
+  changed_when: false
+  ignore_errors: true
+  when: azkaban_use_multiple_executors
+
+- name: Azkaban | Add executor
+  command: >
+    mysql
+    -h {{ azkaban_db_hostname }}
+    -P {{ azkaban_db_port }}
+    -u {{ azkaban_db_user }}
+    -p{{ azkaban_db_pwd }}
+    {{ azkaban_db_name }}
+    -se "{{ azkaban_add_executor_query }}"
+  when:
+      - azkaban_use_multiple_executors
+      - azkaban_executor_check.stdout != "1"
+
+- name: Azkaban | Create paths for Azkaban executor server installation
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+  with_items:
+    - "{{ azkaban_exec_server_conf_dir }}"
+    - "{{ azkaban_exec_server_external_libs_dir }}"
+    - "{{ azkaban_exec_server_log_dir }}"
+    - "{{ azkaban_exec_server_plugins_jobtypes_dir }}"
+
+- name: Azkaban | Copy 'execute as user' file
+  copy:
+    src: "/tmp/{{ azkaban_version_build_name }}/az-exec-util/src/main/c/execute-as-user.c"
+    dest: "{{ azkaban_exec_server_plugins_jobtypes_dir }}"
+    remote_src: yes
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Compile 'execute as user'
+  command: gcc execute-as-user.c -o execute-as-user
+  args:
+    chdir: "{{ azkaban_exec_server_plugins_jobtypes_dir }}"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Set permissions to 'execute as user'
+  file:
+    path: "{{ azkaban_exec_server_plugins_jobtypes_dir }}/execute-as-user"
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+    mode: "6050"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+  tags:
+    skip_ansible_lint
+
+- name: Azkaban | Copy Azkaban executor plugins config
+  template:
+    src: "executorserver/{{ item }}.j2"
+    dest: "{{ azkaban_exec_server_plugins_jobtypes_dir }}/{{ item }}"
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+    mode: "0640"
+  notify: restart azkaban-executor
+  with_items:
+    - "commonprivate.properties"
+
+- name: Azkaban | Copy Azkaban executor server config
+  template:
+    src: "executorserver/{{ item }}.j2"
+    dest: "{{ azkaban_exec_server_conf_dir }}/{{ item }}"
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+    mode: "0640"
+  notify: restart azkaban-executor
+  with_items:
+    - "azkaban.properties"
+    - "log4j.properties"
+
+- name: Azkaban | Copy MySQL connector to executor extlib folder
+  copy:
+    src: "/tmp/{{ mysql_connector_build_name }}/{{ mysql_connector_lib }}"
+    dest: "{{ azkaban_exec_server_external_libs_dir }}/{{ mysql_connector_lib }}"
+    remote_src: yes
+  notify: restart azkaban-executor

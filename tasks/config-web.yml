@@ -1,0 +1,46 @@
+---
+
+- name: Azkaban | Create paths for Azkaban web server installation
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+  with_items:
+    - "{{ azkaban_web_server_conf_dir }}"
+    - "{{ azkaban_web_server_external_libs_dir }}"
+    - "{{ azkaban_web_server_log_dir }}"
+
+- name: Azkaban | Copy Azkaban web server config
+  template:
+    src: "webserver/{{ item }}.j2"
+    dest: "{{ azkaban_web_server_conf_dir }}/{{ item }}"
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+    mode: "0640"
+  notify: restart azkaban-web
+  with_items:
+    - "azkaban-users.xml"
+    - "azkaban.properties"
+    - "log4j.properties"
+
+- name: Azkaban | Copy MySQL connector to web extlib folder
+  copy:
+    src: "/tmp/{{ mysql_connector_build_name }}/{{ mysql_connector_lib }}"
+    dest: "{{ azkaban_web_server_external_libs_dir }}/{{ mysql_connector_lib }}"
+    remote_src: yes
+  notify: restart azkaban-web
+
+- name: Azkaban | Download Azkaban LDAP UserManager
+  get_url:
+    url: "{{ azkaban_ldap_usermanager_url }}"
+    dest: "/tmp"
+  when: azkaban_web_server_user_manager_class == "net.researchgate.azkaban.LdapUserManager"
+  register: download_azkaban_ldap_usermanager
+
+- name: Azkaban | Copy Azkaban LDAP UserManager to extlib folder
+  copy:
+    src: "/tmp/{{ azkaban_ldap_usermanager_lib }}"
+    dest: "{{ azkaban_web_server_external_libs_dir }}/{{ azkaban_ldap_usermanager_lib }}"
+    remote_src: yes
+  when: "azkaban_web_server_user_manager_class == 'net.researchgate.azkaban.LdapUserManager' and download_azkaban_ldap_usermanager.dest"

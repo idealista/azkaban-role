@@ -1,0 +1,134 @@
+---
+# General
+azkaban_version: 3.37.0
+azkaban_ldap_usermanager_version: 1.2.0
+mysql_connector_version: 5.1.44
+
+## Owner
+azkaban_user: azkaban
+azkaban_group: azkaban
+
+## install
+azkaban_server_role: web #[web, executor, all]
+
+## start on boot
+azkaban_service_enabled: True
+## current state: started, stopped
+azkaban_service_state: started
+
+# DDBB
+azkaban_db_name: "azkaban"
+azkaban_db_user: "azkaban"
+azkaban_db_pwd: "azkaban1" #should be changed :)
+azkaban_db_hostname: "localhost"
+azkaban_db_port: 3306
+azkaban_db_num_connections: 100
+
+# Azkaban XML User Manager (http://azkaban.github.io/azkaban/docs/latest/#xml-usermanager)
+azkaban_user_manager_users:
+  - name: "azkaban"
+    password: "azkaban"
+    groups:
+      - "azkaban"
+    roles:
+      - "admin"
+    #proxy: (proxy users that this users can give to a project)
+    #  - ""
+
+azkaban_user_manager_roles:
+  - name: "admin"
+    permissions:
+      - "ADMIN"
+  - name: "metrics"
+    permissions:
+      - "METRICS"
+  - name: "viewer"
+    permissions:
+      - "READ"
+
+azkaban_user_manager_groups:
+  - name: "viewers"
+    roles:
+      - "viewer"
+
+# Azkaban LDAP User Manager
+azkaban_ldap_usermanager_host: "ldap.example.com"
+azkaban_ldap_usermanager_port: 636
+azkaban_ldap_usermanager_use_ssl: true
+azkaban_ldap_usermanager_user_base: "dc=example,dc=com"
+azkaban_ldap_usermanager_user_id_property: "uid"
+azkaban_ldap_usermanager_email_property: "mail"
+azkaban_ldap_usermanager_bind_account: "cn=read-only-admin,dc=example,dc=com"
+azkaban_ldap_usermanager_bind_password: "password"
+azkaban_ldap_usermanager_allowed_groups: "azkaban-ldap-group"
+azkaban_ldap_usermanager_group_search_base: "ou=Groups,dc=example,dc=com"
+azkaban_ldap_usermanager_embedded_groups: false
+
+# Azkaban
+## Azkaban web server
+azkaban_web_server_name: "Test"
+azkaban_web_server_label: "My Local Azkaban"
+azkaban_web_server_color: "#FF3601"
+
+azkaban_use_multiple_executors: false
+
+## Files & Paths
+azkaban_web_server_install_dir: "/opt/azkaban-web-server"
+azkaban_web_server_conf_dir: "/etc/azkaban-web-server"
+azkaban_web_server_external_libs_dir: "{{ azkaban_web_server_install_dir }}/extlib"
+azkaban_web_server_log_dir: "/var/log/azkaban-web-server"
+
+azkaban_web_server_jetty_max_threads: 25
+azkaban_web_server_jetty_port: 8080
+azkaban_web_server_jetty_use_ssl: false
+azkaban_web_server_jetty_ssl_port: 8443
+azkaban_web_server_jetty_connector_stats: true
+azkaban_web_server_xmx: 4G
+
+# Azkaban Notification Email Properties
+azkaban_web_server_mail_sender: ""
+azkaban_web_server_mail_host: ""
+azkaban_web_server_mail_user: ""
+azkaban_web_server_mail_password: ""
+
+# Azkaban User Manager Properties
+azkaban_web_server_user_manager_class: "azkaban.user.XmlUserManager" # [azkaban.user.XmlUserManager, net.researchgate.azkaban.LdapUserManager]
+azkaban_web_server_session_time_to_live: 86400000
+azkaban_web_server_max_num_sessions: 10000
+
+## Azkaban executor server
+azkaban_web_server_host: localhost
+azkaban_exec_server_install_dir: "/opt/azkaban-executor-server"
+azkaban_exec_server_conf_dir: "/etc/azkaban-executor-server"
+azkaban_exec_server_external_libs_dir: "{{ azkaban_exec_server_install_dir }}/extlib"
+azkaban_exec_server_log_dir: "/var/log/azkaban-executor-server"
+azkaban_exec_server_plugins_jobtypes_dir: "{{ azkaban_exec_server_install_dir }}/plugins/jobtypes"
+
+azkaban_exec_server_max_threads: 50
+azkaban_exec_server_port: 12321
+azkaban_exec_server_flow_threads: 30
+azkaban_exec_server_xmx: 3G
+azkaban_exec_server_execution_dir: executions
+azkaban_exec_server_project_dir: projects
+azkaban_exec_server_job_log_chunk_size: 5MB
+azkaban_exec_server_job_log_backup_index: 4
+azkaban_exec_server_flow_num_job_threads: 10
+azkaban_exec_server_job_max_xms: 1GB
+azkaban_exec_server_job_max_xmx: 2GB
+azkaban_exec_server_flow_max_running_minutes: -1
+
+## Azkaban multiple executors mode parameters
+azkaban_executorselector_filters: StaticRemainingFlowSize,MinimumFreeMemory,CpuStatus
+azkaban_executorselector_comparator_NumberOfAssignedFlowComparator: 1
+azkaban_executorselector_comparator_Memory: 1
+azkaban_executorselector_comparator_LastDispatched: 1
+azkaban_executorselector_comparator_CpuUsage: 1
+azkaban_queueprocessing_enabled: "true"
+azkaban_webserver_queue_size: 100000
+azkaban_activeexecutor_refresh_milisecinterval: 50000
+azkaban_activeexecutor_refresh_flowinterval: 5
+azkaban_executorinfo_refresh_maxThreads: 5
+
+## Azkaban execute as user
+## If it's active, logged user must be created also in the system
+azkaban_execute_as_user: "false"
