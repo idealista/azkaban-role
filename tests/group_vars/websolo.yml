@@ -1,0 +1,4 @@
+---
+## AZKABAN
+azkaban_db_hostname: "azkabanwebsolo"
+azkaban_web_server_host: "azkabanwebsolo.vm"

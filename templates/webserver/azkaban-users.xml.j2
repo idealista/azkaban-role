@@ -1,0 +1,13 @@
+<azkaban-users>
+  {% for user in azkaban_user_manager_users %}
+  <user username="{{ user.name }}" password="{{ user.password }}" {% if user.groups is defined %}groups="{{ user.groups|join(', ') }}"{% endif %} {% if user.roles is defined %}roles="{{ user.roles|join(', ') }}"{% endif %} {% if user.proxy is defined %}proxy="{{ user.proxy|join(', ') }}"{% endif %}/>
+  {% endfor %}
+
+  {% for role in azkaban_user_manager_roles %}
+  <role name="{{ role.name }}" permissions="{{ role.permissions|join(', ') }}" />
+  {% endfor %}
+
+  {% for group in azkaban_user_manager_groups %}
+  <group name="{{ group.name }}" {% if group.roles is defined %} roles="{{ group.roles|join(', ') }}" {% endif %} />
+  {% endfor %}
+</azkaban-users>

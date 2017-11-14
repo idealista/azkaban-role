@@ -1,0 +1,38 @@
+---
+
+- name: Azkaban | Extract Azkaban web server
+  unarchive:
+    copy: no
+    src: "/tmp/{{ azkaban_version_build_name }}/azkaban-web-server/build/distributions/azkaban-web-server-{{ azkaban_server_version }}.zip"
+    dest: "/opt"
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Symbolic link to latest Azkaban web server
+  file:
+    src: "/opt/azkaban-web-server-{{ azkaban_server_version }}"
+    dest: "{{ azkaban_web_server_install_dir }}"
+    state: link
+    force: yes
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Copy start scripts
+  template:
+    src: "webserver/{{ item }}.j2"
+    dest: /etc/default/{{ item }}
+    mode: 0755
+    owner: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+  with_items:
+    - "azkaban-web-start.sh"
+    - "azkaban-web"
+    - "azkaban-web-stop.sh"
+
+- name: Azkaban | Copy daemon scripts
+  template:
+    src: "webserver/azkaban-webserver.service.j2"
+    dest: /lib/systemd/system/azkaban-webserver.service
+    mode: 0644

@@ -1,0 +1,17 @@
+#!/bin/bash
+# Shutdown script for azkaban web server
+set -o nounset
+source "{{ azkaban_web_server_install_dir }}/bin/util.sh"
+
+maxattempt=3
+pid=`cat /run/azkaban/web.pid`
+pname="web server"
+
+kill_process_with_retry "${pid}" "${pname}" "${maxattempt}"
+
+if [[ $? == 0 ]]; then
+  rm -f /run/azkaban/web.pid
+  exit 0
+else
+  exit 1
+fi

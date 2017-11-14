@@ -1,0 +1,17 @@
+#!/bin/bash
+# Shutdown script for azkaban exec server
+set -o nounset
+source "{{ azkaban_exec_server_install_dir }}/bin/util.sh"
+
+maxattempt=3
+pid=`cat /run/azkaban/executor.pid`
+pname="exec server"
+
+kill_process_with_retry "${pid}" "${pname}" "${maxattempt}"
+
+if [[ $? == 0 ]]; then
+  rm -f /run/azkaban/executor.pid
+  exit 0
+else
+  exit 1
+fi

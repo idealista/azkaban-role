@@ -1,0 +1,21 @@
+---
+azkaban_required_libs:
+  - unzip
+  - git
+  - build-essential
+
+azkaban_version_build_name: "azkaban-{{ azkaban_version }}"
+azkaban_package: "{{ azkaban_version }}.zip"
+azkaban_url: "https://github.com/azkaban/azkaban/archive/{{ azkaban_package }}"
+
+azkaban_ldap_usermanager_lib: "azkaban-ldap-usermanager-{{ azkaban_ldap_usermanager_version }}.jar"
+azkaban_ldap_usermanager_url: "https://github.com/researchgate/azkaban-ldap-usermanager/releases/download/{{ azkaban_ldap_usermanager_version }}/{{ azkaban_ldap_usermanager_lib }}"
+
+mysql_connector_build_name: "mysql-connector-java-{{ mysql_connector_version }}"
+mysql_connector_package: "{{ mysql_connector_build_name }}.zip"
+mysql_connector_lib: "{{ mysql_connector_build_name }}-bin.jar"
+mysql_connector_url: "https://dev.mysql.com/get/Downloads/Connector-J/{{ mysql_connector_package }}"
+
+azkaban_check_db_exists_query: "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '{{ azkaban_db_name }}'"
+azkaban_check_executor_exists_query: "SELECT 1 FROM executors WHERE host='{{ ansible_hostname }}' and port={{ azkaban_exec_server_port }}"
+azkaban_add_executor_query: "INSERT INTO executors(host,port,active) values('{{ ansible_hostname }}',{{ azkaban_exec_server_port }},1);"

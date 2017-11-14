@@ -1,0 +1,24 @@
+{{ ansible_managed }}
+azkaban.version={{ azkaban_version }}
+
+database.type=mysql
+mysql.port= {{ azkaban_db_port }}
+mysql.host={{ azkaban_db_hostname }}
+mysql.database={{ azkaban_db_name }}
+mysql.user={{ azkaban_db_user }}
+mysql.password= {{ azkaban_db_pwd }}
+mysql.numconnections={{ azkaban_db_num_connections }}
+
+executor.maxThreads={{ azkaban_exec_server_max_threads }}
+executor.port={{ azkaban_exec_server_port }}
+azkaban.execution.dir={{ azkaban_exec_server_execution_dir }}
+azkaban.project.dir={{ azkaban_exec_server_project_dir }}
+executor.flow.threads={{ azkaban_exec_server_flow_threads }}
+job.log.chunk.size={{ azkaban_exec_server_job_log_chunk_size }}
+job.log.backup.index={{ azkaban_exec_server_job_log_backup_index }}
+flow.num.job.threads={{ azkaban_exec_server_flow_num_job_threads }}
+job.max.Xms={{ azkaban_exec_server_job_max_xms }}
+job.max.Xmx={{ azkaban_exec_server_job_max_xmx }}
+azkaban.server.flow.max.running.minutes={{ azkaban_exec_server_flow_max_running_minutes }}
+
+azkaban.webserver.url=http://{{ azkaban_web_server_host }}:{{ azkaban_web_server_jetty_port }}

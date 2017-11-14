@@ -1,0 +1,54 @@
+file:
+  /etc/default/azkaban-executor-start.sh:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/default/azkaban-executor-stop.sh:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/default/azkaban-executor:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0755"
+  /etc/azkaban-executor-server:
+    owner: azkaban
+    group: azkaban
+    filetype: directory
+    exists: true
+  /etc/azkaban-executor-server/azkaban.properties:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0640"
+  /etc/azkaban-executor-server/log4j.properties:
+    owner: azkaban
+    group: azkaban
+    exists: true
+    mode: "0640"
+  /lib/systemd/system/azkaban-executorserver.service:
+    exists: true
+  /var/log/azkaban-executor-server/executor.log:
+    owner: azkaban
+    group: azkaban
+    exists: true
+
+port:
+  tcp6:12321:
+    listening: true
+    ip:
+    - '::'
+
+service:
+  azkaban-executorserver:
+    enabled: true
+    running: true
+
+command:
+  cat /etc/azkaban-executor-server/azkaban.properties |  grep azkaban.version |  cut -d = -f 2:
+    exit-status: 0
+    stdout:
+    - 3.37.0

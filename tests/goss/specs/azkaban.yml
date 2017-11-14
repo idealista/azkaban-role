@@ -1,0 +1,9 @@
+user:
+  azkaban:
+    exists: true
+    groups:
+      - azkaban
+
+group:
+  azkaban:
+    exists: true

@@ -1,0 +1,17 @@
+[Unit]
+Description=The Azkaban Open-source Workflow Manager Web Server
+After=syslog.target network.target
+Before=httpd.service
+
+[Service]
+RuntimeDirectory=azkaban
+PermissionsStartOnly=true
+PIDFile=/run/azkaban/web.pid
+WorkingDirectory={{ azkaban_web_server_install_dir }}
+EnvironmentFile=/etc/default/azkaban-web
+ExecStart=/etc/default/azkaban-web-start.sh
+ExecStop=/etc/default/azkaban-web-stop.sh
+User={{ azkaban_user }}
+
+[Install]
+WantedBy=multi-user.target

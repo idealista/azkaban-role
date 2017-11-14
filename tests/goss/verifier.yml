@@ -1,0 +1,94 @@
+- name: Testing prerequisites
+  hosts: all
+  gather_facts: yes
+
+  vars:
+    goss_version: "v0.3.5"
+    goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version }}/goss-linux-amd64"
+
+  tasks:
+    - name: Download and install goss
+      get_url:
+        url: "{{ goss_url }}"
+        dest: "/usr/local/bin/goss"
+        mode: 0755
+
+- name: Testing prerequisites executor
+  hosts: executor
+
+  tasks:
+    - name: Copy tests to remote
+      copy:
+        src: "{{ playbook_dir }}/specs/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      with_items:
+        - azkaban.yml
+        - azkabanexecutor.yml
+
+- name: Testing prerequisites web multiple
+  hosts: webmultiple
+
+  tasks:
+    - name: Copy tests to remote
+      copy:
+        src: "{{ playbook_dir }}/specs/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      with_items:
+        - azkaban.yml
+        - azkabanweb.yml
+
+- name: Testing prerequisites executor
+  hosts: websolo
+
+  tasks:
+    - name: Copy tests to remote
+      copy:
+        src: "{{ playbook_dir }}/specs/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      with_items:
+        - azkaban.yml
+        - azkabanweb.yml
+        - azkabanexecutor.yml
+
+- name: Execute goss tests
+  hosts: executor
+  gather_facts: no
+
+  vars:
+    goss_results: goss_results
+
+  tasks:
+    - name: Test goss files
+      command: "goss -g /tmp/{{ item }} validate -format tap"
+      with_items:
+        - azkaban.yml
+        - azkabanexecutor.yml
+
+- name: Execute goss tests
+  hosts: webmultiple
+  gather_facts: no
+
+  vars:
+    goss_results: goss_results
+
+  tasks:
+    - name: Test goss files
+      command: "goss -g /tmp/{{ item }} validate -format tap"
+      with_items:
+        - azkaban.yml
+        - azkabanweb.yml
+
+- name: Execute goss tests
+  hosts: websolo
+  gather_facts: no
+
+  vars:
+    goss_results: goss_results
+
+  tasks:
+    - name: Test goss files
+      command: "goss -g /tmp/{{ item }} validate -format tap"
+      with_items:
+        - azkaban.yml
+        - azkabanweb.yml
+        - azkabanexecutor.yml

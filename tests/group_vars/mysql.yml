@@ -1,0 +1,21 @@
+---
+azkaban_db_name: "azkaban"
+azkaban_db_user: "azkaban"
+azkaban_db_pwd: "azkaban1"
+
+## MYSQL
+mysql_databases:
+   - name: "{{ azkaban_db_name }}"
+     encoding: utf8
+
+mysql_users:
+   - name: "{{ azkaban_db_user }}"
+     host: "localhost"
+     password: "{{ azkaban_db_pwd }}"
+     priv:
+        - "{{ azkaban_db_name }}.*:ALL"
+   - name: "{{ azkaban_db_user }}"
+     host: "azkabanexecutor.vm"
+     password: "{{ azkaban_db_pwd }}"
+     priv:
+        - "{{ azkaban_db_name }}.*:ALL"

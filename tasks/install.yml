@@ -1,0 +1,89 @@
+---
+
+- name: Azkaban | Install required libs
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ azkaban_required_libs }}"
+
+- name: Azkaban | Ensure azkaban group
+  group:
+    name: "{{ azkaban_group }}"
+
+- name: Azkaban | Ensure azkaban user
+  user:
+    name: "{{ azkaban_user }}"
+    group: "{{ azkaban_group }}"
+    home: /bin/false
+
+- name: Azkaban | Set server config dir
+  set_fact:
+    azkaban_server_conf_dir: "{{ ('web' == azkaban_server_role) | ternary(azkaban_web_server_conf_dir,azkaban_exec_server_conf_dir) }}"
+
+- name: Azkaban | Check azkaban version
+  shell: >
+    cat {{ azkaban_server_conf_dir }}/azkaban.properties |
+    grep azkaban.version |
+    cut -d = -f 2
+  register: azkaban_version_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Azkaban | Download Azkaban
+  get_url:
+    url: "{{ azkaban_url }}"
+    dest: "/tmp/{{ azkaban_package }}"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Extract Azkaban in the installation path
+  unarchive:
+    copy: no
+    src: "/tmp/{{ azkaban_package }}"
+    dest: "/tmp"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Build Azkaban using embedded Gradle
+  command: "./gradlew build -x test -Dorg.gradle.daemon=false"
+  args:
+    chdir: "/tmp/{{ azkaban_version_build_name }}"
+  when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
+
+- name: Azkaban | Find package server name
+  find:
+    path: "/tmp/{{ azkaban_version_build_name }}/azkaban-web-server/build/distributions/"
+    patterns: '*.zip'
+  register: azkaban_server_version_check
+
+- name: Azkaban | Set azkaban_server_version
+  set_fact:
+    azkaban_server_version: "{{ azkaban_server_version_check.files[0].path | basename | regex_replace('.zip') | regex_replace('azkaban-web-server-') }}"
+
+- name: Azkaban | Install MySQL client if doesn't exist
+  apt:
+    name: mysql-client
+
+- name: Azkaban | Check DB
+  command: >
+    mysql
+    -h {{ azkaban_db_hostname }}
+    -P {{ azkaban_db_port }}
+    -u {{ azkaban_db_user }}
+    -p{{ azkaban_db_pwd }}
+    -se "{{ azkaban_check_db_exists_query }}"
+  register: azkaban_db_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Azkaban | Init DB
+  shell: "mysql -h {{ azkaban_db_hostname }} -P {{ azkaban_db_port }} -u {{ azkaban_db_user }} -p{{ azkaban_db_pwd }} {{ azkaban_db_name }} < create-all-sql-{{ azkaban_server_version }}.sql"
+  args:
+    chdir: /tmp/{{ azkaban_version_build_name }}/azkaban-db/build/sql/
+  when:
+      - azkaban_db_check.stdout == "0"
+
+- include: install-web.yml
+  tags: azkaban-web
+  when: azkaban_server_role in ["web", "all"]
+
+- include: install-executor.yml
+  tags: azkaban-executor
+  when: azkaban_server_role in ["executor", "all"]

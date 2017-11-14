@@ -1,0 +1,14 @@
+---
+# handlers file for azkaban-role
+
+- name: restart azkaban-web
+  systemd:
+    name: azkaban-webserver
+    state: restarted
+  when: azkaban_service_state != 'stopped'
+
+- name: restart azkaban-executor
+  systemd:
+    name: azkaban-executorserver
+    state: restarted
+  when: azkaban_service_state != 'stopped'
