@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 
 ## [Unreleased](https://github.com/idealista/azkaban-role/tree/develop)
 
+## [1.1.0](https://github.com/idealista/azkaban-role/tree/1.1.0)
+### Added
+- *[#2](https://github.com/idealista/azkaban-role/issues/2) Support memCheck.enabled setting* @dortegau
+
 ## [1.0.0](https://github.com/idealista/azkaban-role/tree/1.0.0)
 ### Added
 - *First release*
