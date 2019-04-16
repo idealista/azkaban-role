@@ -96,6 +96,9 @@ azkaban_web_server_user_manager_class: "azkaban.user.XmlUserManager" # [azkaban.
 azkaban_web_server_session_time_to_live: 86400000
 azkaban_web_server_max_num_sessions: 10000
 
+# Azkaban jmx configuration
+azkaban_web_server_jmx_port: 1099
+
 ## Azkaban executor server
 azkaban_web_server_host: localhost
 azkaban_exec_server_install_dir: "/opt/azkaban-executor-server"
@@ -117,6 +120,9 @@ azkaban_exec_server_job_max_xms: 1GB
 azkaban_exec_server_job_max_xmx: 2GB
 azkaban_exec_server_flow_max_running_minutes: -1
 azkaban_exec_mem_check_enabled: true
+
+# Azkaban jmx configuration
+azkaban_exec_server_jmx_port: 1199
 
 ## Azkaban multiple executors mode parameters
 azkaban_executorselector_filters: StaticRemainingFlowSize,MinimumFreeMemory,CpuStatus
