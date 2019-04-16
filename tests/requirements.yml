@@ -1,9 +1,9 @@
 - src: https://github.com/idealista/mysql-role.git
   scm: git
-  version: 2.2.1
+  version: 2.2.2
   name: mysql
 
 - src: https://github.com/idealista/java-role.git
   scm: git
-  version: 4.0.0
+  version: 4.1.0
   name: java
