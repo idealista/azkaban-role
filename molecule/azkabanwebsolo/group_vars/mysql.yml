@@ -19,3 +19,8 @@ mysql_users:
      password: "{{ azkaban_db_pwd }}"
      priv:
         - "{{ azkaban_db_name }}.*:ALL"
+   - name: "{{ azkaban_db_user }}"
+     host: "azkabanwebsolo.vm"
+     password: "{{ azkaban_db_pwd }}"
+     priv:
+        - "{{ azkaban_db_name }}.*:ALL"

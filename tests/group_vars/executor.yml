@@ -1,5 +1,0 @@
----
-## AZKABAN
-azkaban_db_hostname: "azkabanwebmultiple"
-azkaban_web_server_host: "azkabanwebmultiple.vm"
-azkaban_use_multiple_executors: true

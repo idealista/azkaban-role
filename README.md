@@ -69,14 +69,15 @@ Look to the defaults properties file to see the possible configuration propertie
 ## Testing
 
 ```
-molecule test --platform=Debian9
+pipenv install -r test-requirements.txt --python 2.7
+pipenv run molecule test --all
 ```
 
 See molecule.yml to check possible testing platforms.
 
 ## Built With
 
-![Ansible](https://img.shields.io/badge/ansible-2.2.1.0-green.svg)
+![Ansible](https://img.shields.io/badge/ansible-2.3.1.0-green.svg)
 
 ## Versioning
 
@@ -94,7 +95,7 @@ See also the list of [contributors](https://github.com/idealista/azkaban-role/co
 
 ![Apache 2.0 Licence](https://img.shields.io/hexpm/l/plug.svg)
 
-This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license - see the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license - see the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 

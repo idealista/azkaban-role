@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  company: Idealista S.A.
+  company: Idealista S.A.U.
   description: Azkaban role
   min_ansible_version: 2.3.1.0
   license: Apache 2.0
