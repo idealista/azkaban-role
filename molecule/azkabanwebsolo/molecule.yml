@@ -7,8 +7,8 @@ lint:
   name: yamllint
   enabled: False
 platforms:
-  - name: azkabanexecutor.vm
-    hostname: azkabanexecutor.vm
+  - name: azkabanexecutor
+    hostname: azkabanexecutor
     image: idealista/jdk:8u181-stretch-openjdk-headless
     privileged: true
     capabilities:
@@ -20,8 +20,8 @@ platforms:
       - executor
     command: '/lib/systemd/systemd'
 
-  - name: azkabanwebsolo.vm
-    hostname: azkabanwebsolo.vm
+  - name: azkabanwebsolo
+    hostname: azkabanwebsolo
     image: idealista/jdk:8u181-stretch-openjdk-headless
     privileged: true
     capabilities:

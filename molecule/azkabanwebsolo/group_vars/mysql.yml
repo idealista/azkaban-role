@@ -15,12 +15,12 @@ mysql_users:
      priv:
         - "{{ azkaban_db_name }}.*:ALL"
    - name: "{{ azkaban_db_user }}"
-     host: "azkabanexecutor.vm"
+     host: "azkabanexecutor"
      password: "{{ azkaban_db_pwd }}"
      priv:
         - "{{ azkaban_db_name }}.*:ALL"
    - name: "{{ azkaban_db_user }}"
-     host: "azkabanwebsolo.vm"
+     host: "azkabanwebsolo"
      password: "{{ azkaban_db_pwd }}"
      priv:
         - "{{ azkaban_db_name }}.*:ALL"
