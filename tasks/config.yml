@@ -11,10 +11,12 @@
     src: "/tmp/{{ mysql_connector_package }}"
     dest: "/tmp"
 
-- include: config-executor.yml
+- name: Azkaban | Config Executor
+  import_tasks: config-executor.yml
   tags: azkaban-executor
   when: azkaban_server_role in ["executor", "all"]
 
-- include: config-web.yml
+- name: Azkaban | Config Web
+  import_tasks: config-web.yml
   tags: azkaban-web
   when: azkaban_server_role in ["web", "all"]
