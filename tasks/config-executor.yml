@@ -43,7 +43,7 @@
   copy:
     src: "/tmp/{{ azkaban_version_build_name }}/az-exec-util/src/main/c/execute-as-user.c"
     dest: "{{ azkaban_exec_server_plugins_jobtypes_dir }}"
-    remote_src: yes
+    remote_src: true
   when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
 
 - name: Azkaban | Compile 'execute as user'
@@ -89,5 +89,5 @@
   copy:
     src: "/tmp/{{ mysql_connector_build_name }}/{{ mysql_connector_lib }}"
     dest: "{{ azkaban_exec_server_external_libs_dir }}/{{ mysql_connector_lib }}"
-    remote_src: yes
+    remote_src: true
   notify: restart azkaban-executor

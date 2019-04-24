@@ -36,7 +36,7 @@
 
 - name: Azkaban | Extract Azkaban in the installation path
   unarchive:
-    copy: no
+    copy: false
     src: "/tmp/{{ azkaban_package }}"
     dest: "/tmp"
   when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version
@@ -74,11 +74,17 @@
   ignore_errors: true
 
 - name: Azkaban | Init DB
-  shell: "mysql -h {{ azkaban_db_hostname }} -P {{ azkaban_db_port }} -u {{ azkaban_db_user }} -p{{ azkaban_db_pwd }} {{ azkaban_db_name }} < create-all-sql-{{ azkaban_server_version }}.sql"
+  shell: >
+    mysql -h {{ azkaban_db_hostname }}
+    -P {{ azkaban_db_port }}
+    -u {{ azkaban_db_user }}
+    -p{{ azkaban_db_pwd }}
+    {{ azkaban_db_name }}
+    < create-all-sql-{{ azkaban_server_version }}.sql
   args:
     chdir: /tmp/{{ azkaban_version_build_name }}/azkaban-db/build/sql/
   when:
-      - azkaban_db_check.stdout == "0"
+    - azkaban_db_check.stdout == "0"
 
 - name: Azkaban | Install Web
   import_tasks: install-web.yml

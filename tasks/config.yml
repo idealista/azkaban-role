@@ -7,7 +7,7 @@
 
 - name: Azkaban | Extract MySQL connector
   unarchive:
-    copy: no
+    copy: false
     src: "/tmp/{{ mysql_connector_package }}"
     dest: "/tmp"
 
