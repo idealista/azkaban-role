@@ -4,7 +4,12 @@ AZKABAN_DIR={{ azkaban_exec_server_install_dir }}
 AZKABAN_OPTS=-Xmx{{ azkaban_exec_server_xmx }} \
 -Dlog4j.configuration=file:{{ azkaban_exec_server_conf_dir }}/log4j.properties \
 -Dlog4j.log.dir={{ azkaban_exec_server_log_dir }} \
--server -Dcom.sun.management.jmxremote \
+-server \
+-Dcom.sun.management.jmxremote=true \
+-Dcom.sun.management.jmxremote.port={{ azkaban_exec_server_jmx_port }} \
+-Dcom.sun.management.jmxremote.local.only=false \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.ssl=false \
 -Djava.io.tmpdir=/tmp \
 -Dexecutorport={{ azkaban_exec_server_port }} \
 -Dserverpath={{ azkaban_exec_server_install_dir }}

@@ -42,10 +42,10 @@ file:
     exists: true
 
 port:
-  tcp6:8080:
+  tcp:8080:
     listening: true
     ip:
-    - '::'
+    - '0.0.0.0'
 
 service:
   azkaban-webserver:
