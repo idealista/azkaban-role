@@ -1,0 +1,48 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  enabled: False
+platforms:
+  - name: azkabanexecutor
+    hostname: azkabanexecutor
+    image: idealista/jdk:8u181-stretch-openjdk-headless
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    groups:
+      - azkaban
+      - executor
+    command: '/lib/systemd/systemd'
+
+  - name: azkabanwebsolo
+    hostname: azkabanwebsolo
+    image: idealista/jdk:8u181-stretch-openjdk-headless
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    groups:
+      - mysql
+      - azkaban
+      - websolo
+      - executor
+    command: '/lib/systemd/systemd'
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+    enabled: false
+scenario:
+  name: azkabanwebsolo
+verifier:
+  name: goss
+  lint:
+    name: yamllint

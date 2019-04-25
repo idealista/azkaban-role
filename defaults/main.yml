@@ -9,17 +9,17 @@ azkaban_user: azkaban
 azkaban_group: azkaban
 
 ## install
-azkaban_server_role: web #[web, executor, all]
+azkaban_server_role: web  # [web, executor, all]
 
 ## start on boot
-azkaban_service_enabled: True
+azkaban_service_enabled: true
 ## current state: started, stopped
 azkaban_service_state: started
 
 # DDBB
 azkaban_db_name: "azkaban"
 azkaban_db_user: "azkaban"
-azkaban_db_pwd: "azkaban1" #should be changed :)
+azkaban_db_pwd: "azkaban1"  # should be changed :)
 azkaban_db_hostname: "localhost"
 azkaban_db_port: 3306
 azkaban_db_num_connections: 100
@@ -32,7 +32,7 @@ azkaban_user_manager_users:
       - "azkaban"
     roles:
       - "admin"
-    #proxy: (proxy users that this users can give to a project)
+    # proxy: (proxy users that this users can give to a project)
     #  - ""
 
 azkaban_user_manager_roles:
@@ -92,9 +92,12 @@ azkaban_web_server_mail_user: ""
 azkaban_web_server_mail_password: ""
 
 # Azkaban User Manager Properties
-azkaban_web_server_user_manager_class: "azkaban.user.XmlUserManager" # [azkaban.user.XmlUserManager, net.researchgate.azkaban.LdapUserManager]
+azkaban_web_server_user_manager_class: "azkaban.user.XmlUserManager"  # [azkaban.user.XmlUserManager, net.researchgate.azkaban.LdapUserManager]
 azkaban_web_server_session_time_to_live: 86400000
 azkaban_web_server_max_num_sessions: 10000
+
+# Azkaban jmx configuration
+azkaban_web_server_jmx_port: 1099
 
 ## Azkaban executor server
 azkaban_web_server_host: localhost
@@ -117,6 +120,9 @@ azkaban_exec_server_job_max_xms: 1GB
 azkaban_exec_server_job_max_xmx: 2GB
 azkaban_exec_server_flow_max_running_minutes: -1
 azkaban_exec_mem_check_enabled: true
+
+# Azkaban jmx configuration
+azkaban_exec_server_jmx_port: 1199
 
 ## Azkaban multiple executors mode parameters
 azkaban_executorselector_filters: StaticRemainingFlowSize,MinimumFreeMemory,CpuStatus

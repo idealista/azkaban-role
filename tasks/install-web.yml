@@ -2,7 +2,7 @@
 
 - name: Azkaban | Extract Azkaban web server
   unarchive:
-    copy: no
+    copy: false
     src: "/tmp/{{ azkaban_version_build_name }}/azkaban-web-server/build/distributions/azkaban-web-server-{{ azkaban_server_version }}.zip"
     dest: "/opt"
     owner: "{{ azkaban_user }}"
@@ -14,7 +14,7 @@
     src: "/opt/azkaban-web-server-{{ azkaban_server_version }}"
     dest: "{{ azkaban_web_server_install_dir }}"
     state: link
-    force: yes
+    force: true
     owner: "{{ azkaban_user }}"
     group: "{{ azkaban_group }}"
   when: azkaban_version_check|failed or azkaban_version_check.stdout != azkaban_version

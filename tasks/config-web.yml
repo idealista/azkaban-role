@@ -28,7 +28,7 @@
   copy:
     src: "/tmp/{{ mysql_connector_build_name }}/{{ mysql_connector_lib }}"
     dest: "{{ azkaban_web_server_external_libs_dir }}/{{ mysql_connector_lib }}"
-    remote_src: yes
+    remote_src: true
   notify: restart azkaban-web
 
 - name: Azkaban | Download Azkaban LDAP UserManager
@@ -42,5 +42,5 @@
   copy:
     src: "/tmp/{{ azkaban_ldap_usermanager_lib }}"
     dest: "{{ azkaban_web_server_external_libs_dir }}/{{ azkaban_ldap_usermanager_lib }}"
-    remote_src: yes
+    remote_src: true
   when: "azkaban_web_server_user_manager_class == 'net.researchgate.azkaban.LdapUserManager' and download_azkaban_ldap_usermanager.dest"

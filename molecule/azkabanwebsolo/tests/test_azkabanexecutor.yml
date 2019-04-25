@@ -37,10 +37,10 @@ file:
     exists: true
 
 port:
-  tcp6:12321:
+  tcp:12321:
     listening: true
     ip:
-    - '::'
+    - '0.0.0.0'
 
 service:
   azkaban-executorserver:
