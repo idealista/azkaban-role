@@ -4,10 +4,6 @@
   roles:
     - mysql
 
-- hosts: azkaban
-  roles:
-    - java
-
 - hosts: websolo
   roles:
     - role: azkaban-role
