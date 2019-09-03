@@ -3,7 +3,7 @@ galaxy_info:
   author: Idealista S.A.U.
   company: Idealista S.A.U.
   description: Azkaban role
-  min_ansible_version: 2.4.5.0
+  min_ansible_version: 2.8.4.0
   license: Apache 2.0
   platforms:
     - name: Debian
