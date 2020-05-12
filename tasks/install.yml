@@ -13,7 +13,6 @@
   user:
     name: "{{ azkaban_user }}"
     group: "{{ azkaban_group }}"
-    home: /bin/false
 
 - name: Azkaban | Set server config dir
   set_fact:
