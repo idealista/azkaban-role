@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a changelog](https://github.com/olivierlacan/keep-a-changelog).
 
+## Added
+- *[#25](https://github.com/idealista/azkaban-role/pull/25) (2024-01-17)- Add ".gitattributes" file for linguist detection.* @ygomezsaiz
+
 ## [Unreleased](https://github.com/idealista/azkaban-role/tree/develop)
 ### Fixed
 - *[#16](https://github.com/idealista/azkaban-role/issues/16) User's home directory setting prevents creating temporary folders* @fabiomx
